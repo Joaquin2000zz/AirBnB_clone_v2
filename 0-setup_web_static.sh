@@ -1,6 +1,10 @@
+#!/usr/bin/env bash
 # install NGINX and restart the service
-sudo apt-get update
-sudo apt-get install nginx -y
+if [ "$(dpkg-query -W -f="${Status}" nginx 2>/dev/null | grep -c "ok installed")" -eq 0 ]
+then
+  sudo apt-get update
+  sudo apt-get install nginx -y
+fi
 # creating folders needed if dosen't already exist
 mkdir -p ~/data/web_static/releases/test/
 mkdir -p ~/data/web_static/shared
