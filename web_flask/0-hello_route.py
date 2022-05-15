@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/', strict_slashes=False)
 def hello():
     """main path to the flask application"""
-    return 'Hello HBNB!!'
+    return 'Hello HBNB!'
 
 
 if __name__ == '__main__':
