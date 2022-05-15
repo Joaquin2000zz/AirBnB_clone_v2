@@ -13,9 +13,14 @@ class DBStorage():
     __session = None
 
     def __init__(self):
-        eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
-{env.get("HBNB_MYSQL_PWD")}@\
-{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
+        eng_creat = "mysql+mysqldb://{}:{}@{}/{}".format(env.get("HBNB_MYSQL\
+_USER"),
+                                                         env.get("HBNB_MYSQL\
+_PWD"),
+                                                         env.get("HBNB_MYSQL\
+_HOST"),
+                                                         env.get("HBNB_MYSQL\
+_DB"))
 
         self.__engine = create_engine(eng_creat, pool_pre_ping=True)
 
@@ -29,12 +34,14 @@ class DBStorage():
             for t in Base.__subclasses__():
                 objs = self.__session.query(t).all()
                 for item in objs:
-                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+                    res["{}.{}".format(item.to_dict()['__class__'],
+                                       item.id)] = item
         else:
             if cls in Base.__subclasses__():
                 objs = self.__session.query(cls).all()
                 for item in objs:
-                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+                    res["{}.{}".format(item.to_dict()['__class__'],
+                                       item.id)] = item
 
         return res
 
@@ -80,3 +87,8 @@ class DBStorage():
                 self.save()
             except Exception as Ex:
                 pass
+
+    def close(self):
+        """close() on the class Session to force the commit
+        before end the session"""
+        self.__session.close()

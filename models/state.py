@@ -21,7 +21,6 @@ class State(BaseModel, Base):
         getter cities
         """
         from models import storage
-
         objs = []
         for key, value in storage.all('City').items():
             key = key.split('.')
